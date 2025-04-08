@@ -1,10 +1,12 @@
-package com.accesadades.botiga_danieldg.Service;
+package com.accesadades.botiga.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.accesadades.botiga.Model.Product;
+import com.accesadades.botiga.Repository.ProductRepository;
+
 import java.util.Set;
-import com.accesadades.botiga_danieldg.Model.Product;
-import com.accesadades.botiga_danieldg.Repository.ProductRepository;
 
 @Service
 public class ProductServiceImpl implements ProductService {
