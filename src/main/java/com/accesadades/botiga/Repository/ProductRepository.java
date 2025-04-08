@@ -1,11 +1,13 @@
-package com.accesadades.botiga_danieldg.Repository;
+package com.accesadades.botiga.Repository;
 
 import org.springframework.stereotype.Repository;
+
+import com.accesadades.botiga.Model.Product;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.NonNull;
 
 import java.util.Set;
-import com.accesadades.botiga_danieldg.Model.Product;
 
 @Repository
 public interface ProductRepository extends CrudRepository<Product, Long> {

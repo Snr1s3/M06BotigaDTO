@@ -1,13 +1,13 @@
-package com.accesadades.botiga_danieldg;
+package com.accesadades.botiga;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BotigaDanieldgApplication {
+public class BotigaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BotigaDanieldgApplication.class, args);
+		SpringApplication.run(BotigaApplication.class, args);
 	}
 
 }

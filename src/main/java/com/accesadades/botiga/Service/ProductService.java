@@ -1,7 +1,8 @@
-package com.accesadades.botiga_danieldg.Service;
+package com.accesadades.botiga.Service;
 
 import java.util.Set;
-import com.accesadades.botiga_danieldg.Model.Product;
+
+import com.accesadades.botiga.Model.Product;
 
 public interface ProductService {
  

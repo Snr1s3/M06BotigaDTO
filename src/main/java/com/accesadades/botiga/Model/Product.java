@@ -1,4 +1,4 @@
-package com.accesadades.botiga_danieldg.Model;
+package com.accesadades.botiga.Model;
 
 import lombok.*;
 import jakarta.persistence.*;

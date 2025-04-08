@@ -1,4 +1,4 @@
-package com.accesadades.botiga_danieldg.Controller;
+package com.accesadades.botiga.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.accesadades.botiga_danieldg.Model.Product;
-import com.accesadades.botiga_danieldg.Service.ProductService;
+import com.accesadades.botiga.Model.Product;
+import com.accesadades.botiga.Service.ProductService;
+
 import java.util.Set;
 
 @Controller
