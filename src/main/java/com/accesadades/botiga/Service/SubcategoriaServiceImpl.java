@@ -14,26 +14,6 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
 
     @Autowired
     private BotigaMapper categoriaMapper;
-    /*
-    @Override
-    public Set<SubcategoriaDTO> findAllSubcategorias() {
-        return categoriaRepository.findAll().stream()
-                .map(categoriaMapper::toDTO)
-                .collect(Collectors.toSet());
-    }
-
-    @Override
-    public SubcategoriaDTO findSubcategoriasByName(String name) {
-        Subcategoria subcategoria = categoriaRepository.findByName(name);
-        return categoriaMapper.toDTO(subcategoria);
-    }
-
-    @Override
-    public Set<SubcategoriaDTO> findAllSubcategoriasBySubcategoria(String subcategoria) {
-        return categoriaRepository.findBySubcategoria(subcategoria).stream()
-                .map(categoriaMapper::toDTO)
-                .collect(Collectors.toSet());
-    }*/
 
     @Override
     public List<Subcategoria> findAll() {
