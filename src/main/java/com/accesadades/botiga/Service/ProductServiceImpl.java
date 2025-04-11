@@ -5,11 +5,10 @@ import org.springframework.stereotype.Service;
 
 import com.accesadades.botiga.Model.Product;
 import com.accesadades.botiga.Repository.ProductRepository;
-import com.accesadades.botiga.DTO.ProductDTO;
-import com.accesadades.botiga.Mapper.ProductMapper;
+//import com.accesadades.botiga.Mapper.BotigaMapper;
 
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -17,9 +16,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private ProductMapper productMapper;
-
+    //@Autowired
+    //private BotigaMapper productMapper;
+    /*
     @Override
     public Set<ProductDTO> findAllProducts() {
         return productRepository.findAll().stream()
@@ -34,11 +33,35 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Set<ProductDTO> findAllProductsBySubcategory(String subcategory) {
-        return null;
+    public Set<ProductDTO> findAllProductsBySubcategoria(String subcategoria) {
+        return productRepository.findBySubcategoria(subcategoria).stream()
+                .map(productMapper::toDTO)
+                .collect(Collectors.toSet());
+    }*/
+
+    @Override
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 
     @Override
-    public void increasePrice(Product product) {
+    public Optional<Product> findById(Long id) {
+        return productRepository.findById(id);
+    }
+
+    @Override
+    public Product save(Product entity) {
+        if (entity.getCategory() == null || !categoryRepository.existsById(entity.getCategory().getId())) {
+            throw new IllegalArgumentException("No existeix la categoria especificada.");
+        }
+        if (entity.getSubcategory() == null || !subcategoryRepository.existsById(entity.getSubcategory().getId())) {
+            throw new IllegalArgumentException("No existeix la subcategoria especificada.");
+        }
+        return productRepository.save(entity);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        productRepository.deleteById(id);
     }
 }

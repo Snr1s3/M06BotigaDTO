@@ -1,8 +1,35 @@
 package com.accesadades.botiga.Mapper;
 
+import com.accesadades.botiga.DTO.ProductDTO;
+import com.accesadades.botiga.DTO.CategoriaDTO;
+import com.accesadades.botiga.DTO.SubcategoriaDTO;
+import com.accesadades.botiga.Model.Categoria;
+import  com.accesadades.botiga.Model.Product;
+import com.accesadades.botiga.Model.Subcategoria;
+
+public interface BotigaMapper{
+    ProductDTO toDTO(Product producte);
+
+    Product toEntity(ProductDTO dto);
+
+    CategoriaDTO toDTO(Categoria Categoria);
+
+    Categoria toEntity(CategoriaDTO dto);
+
+    SubcategoriaDTO toDTO(Subcategoria producte);
+
+    Subcategoria toEntity(SubcategoriaDTO dto);
+}
+
+
+
+
+/*
+ * package com.accesadades.botiga.Mapper;
+
 import com.accesadades.botiga.Model.Product;
 import com.accesadades.botiga.DTO.ProductDTO;
-import com.accesadades.botiga.DTO.SubcategoryDTO;
+import com.accesadades.botiga.DTO.SubcategoriaDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -29,3 +56,5 @@ public interface ProductMapper {
 }
 
 
+
+ */
