@@ -2,7 +2,7 @@ package com.accesadades.botiga.DTO;
 
 public class ProductDTO {
     private String name;
-    private SubcategoryDTO subcategory;
+    private SubcategoriaDTO subcategoria;
     private String description;
     private String company;
     private float price;
@@ -14,11 +14,11 @@ public class ProductDTO {
     public void setName(String name) {
         this.name = name;
     }
-    public SubcategoryDTO getSubcategory() {
-        return subcategory;
+    public SubcategoriaDTO getSubcategoria() {
+        return subcategoria;
     }
-    public void setSubcategory(SubcategoryDTO subcategory) {
-        this.subcategory = subcategory;
+    public void setSubcategoria(SubcategoriaDTO subcategoria) {
+        this.subcategoria = subcategoria;
     }
     public String getDescription() {
         return description;
