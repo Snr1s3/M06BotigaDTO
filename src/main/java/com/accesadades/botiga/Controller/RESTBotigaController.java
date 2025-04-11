@@ -70,6 +70,7 @@ public class RESTBotigaController {
     }
 
     //api/botiga/ModificarPreu?id=...&nouPreu=...
+    @PostMapping("/api/botiga/ModificarPreu")
     public String modificarPreu( @RequestParam(name = "id", required = true) Long id, @RequestParam(name = "nouPreu", required = true) Long nouPreu) {
         try {
             boolean updated = productService.updatePrice(id, nouPreu);
@@ -109,7 +110,7 @@ public class RESTBotigaController {
     }
 
     ///api/botiga/EliminarProducte?id=...
-    @PostMapping("/EliminarProducte")
+    @PostMapping("api/botiga/EliminarProducte")
     public String eliminarProducte(@RequestParam(name = "id", required = true) Long id) {
         try {
             boolean deleted = productService.delete(id);
@@ -119,7 +120,7 @@ public class RESTBotigaController {
     }
 
     ///api/botiga/LlistarProductesPerCategoria?idCategoria=...
-    @GetMapping("/LlistarProductesPerCategoria")
+    @GetMapping("api/botiga/LlistarProductesPerCategoria")
     public String llistarProductesPerCategoria(@RequestParam(name = "idCategoria", required = true) Long idCategoria) {
         try {
             Set<ProductDTO> producteDTO = productService.findAllProductsBySubcategory(idCategoria);
@@ -128,7 +129,7 @@ public class RESTBotigaController {
     }
 
     ///api/botiga/LlistarSubcategoriesPerCategoria?idCategoria=...
-    @GetMapping("/LlistarSubcategoriesPerCategoria")
+    @GetMapping("/api/botiga/LlistarSubcategoriesPerCategoria")
     public String llistarSubcategoriesPerCategoria(@RequestParam(name = "idCategoria", required = true) Long idCategoria) {
         try {
             Set<SubcategoriesDTO> subcategoriaDTO = subcategoriaService.findById(idCategoria);
