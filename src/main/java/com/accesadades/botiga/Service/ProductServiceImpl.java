@@ -31,13 +31,13 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findByName(name);
         return productMapper.toDTO(product);
     }
-
+*/
     @Override
-    public Set<ProductDTO> findAllProductsBySubcategoria(String subcategoria) {
-        return productRepository.findBySubcategoria(subcategoria).stream()
+    public Set<ProductDTO> findAllProductsBySubcategoria(int idCategoria) {
+        return productRepository.findBySubcategoria(idCategoria).stream()
                 .map(productMapper::toDTO)
                 .collect(Collectors.toSet());
-    }*/
+    }
 
     @Override
     public List<Product> findAll() {
