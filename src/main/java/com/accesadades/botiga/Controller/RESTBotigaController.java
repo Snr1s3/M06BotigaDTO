@@ -13,8 +13,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.support.SessionStatus;
+
+import com.accesadades.botiga.DTO.CategoriaDTO;
+import com.accesadades.botiga.DTO.ProductDTO;
+import com.accesadades.botiga.DTO.SubcategoriaDTO;
 import com.accesadades.botiga.Model.Product;
+import com.accesadades.botiga.Service.BotigaService;
+import com.accesadades.botiga.Service.CategoriaService;
 import com.accesadades.botiga.Service.ProductService;
+import com.accesadades.botiga.Service.SubcategoriaService;
+
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
@@ -41,14 +49,14 @@ public class RESTBotigaController {
     //api/botiga/inserirProducte
     @PostMapping("/api/botiga/inserirProductes")
     public String inserirProducte (@RequestBody ProductDTO productDTO) {
-        botigaService.inserirProducte(productDTO);
+        productService.inserirProducte(productDTO);
         return "producte inserit";  
     }
 
     //api/botiga/LlistarProductes
     @GetMapping("api/botiga/LlistarProductes")
     public String llistarProductes() {
-        botigaService.llistarProductes();
+        productService.llistarProductes();
         return "productes";
     }
 
