@@ -1,14 +1,18 @@
 package com.accesadades.botiga.Service;
 
+import com.accesadades.botiga.DTO.ProductDTO;
+import com.accesadades.botiga.Model.Product;
+import com.accesadades.botiga.Repository.ProductRepository;
+import com.accesadades.botiga.Repository.CategoriaRepository;
+import com.accesadades.botiga.Repository.SubcategoriaRepository;
+import com.accesadades.botiga.Mapper.BotigaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.accesadades.botiga.Model.Product;
-import com.accesadades.botiga.Repository.ProductRepository;
-//import com.accesadades.botiga.Mapper.BotigaMapper;
-
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -16,9 +20,15 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    //@Autowired
-    //private BotigaMapper productMapper;
-    /*
+    @Autowired
+    private CategoriaRepository categoryRepository;
+
+    @Autowired
+    private SubcategoriaRepository subcategoryRepository;
+
+    @Autowired
+    private BotigaMapper productMapper;
+
     @Override
     public Set<ProductDTO> findAllProducts() {
         return productRepository.findAll().stream()
@@ -31,10 +41,11 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findByName(name);
         return productMapper.toDTO(product);
     }
-*/
+
     @Override
-    public Set<ProductDTO> findAllProductsBySubcategoria(int idCategoria) {
-        return productRepository.findBySubcategoria(idCategoria).stream()
+    public Set<ProductDTO> findAllProductsBySubcategory(String subcategoryName) {
+        return productRepository.findAll().stream()
+                .filter(p -> p.getSubcategory() != null && p.getSubcategory().getName().equalsIgnoreCase(subcategoryName))
                 .map(productMapper::toDTO)
                 .collect(Collectors.toSet());
     }
@@ -51,12 +62,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product save(Product entity) {
-        if (entity.getCategory() == null || !categoryRepository.existsById(entity.getCategory().getId())) {
+        if (entity.getSubcategory() == null || 
+            entity.getSubcategory().getCategory() == null || 
+            !categoryRepository.existsById(entity.getSubcategory().getCategory().getId())) {
             throw new IllegalArgumentException("No existeix la categoria especificada.");
         }
-        if (entity.getSubcategory() == null || !subcategoryRepository.existsById(entity.getSubcategory().getId())) {
+        if (!subcategoryRepository.existsById(entity.getSubcategory().getId())) {
             throw new IllegalArgumentException("No existeix la subcategoria especificada.");
         }
+
         return productRepository.save(entity);
     }
 

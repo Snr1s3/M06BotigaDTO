@@ -1,16 +1,18 @@
 package com.accesadades.botiga.Service;
 
+import com.accesadades.botiga.Repository.SubcategoriaRepository;
 import com.accesadades.botiga.Model.Subcategoria;
 import com.accesadades.botiga.Mapper.BotigaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
+@Service
 public class SubcategoriaServiceImpl implements SubcategoriaService {
 
     @Autowired
-    private SubcategoriaRepository categoriaRepository;
+    private SubcategoriaRepository subcategoriaRepository;
 
     @Autowired
     private BotigaMapper categoriaMapper;

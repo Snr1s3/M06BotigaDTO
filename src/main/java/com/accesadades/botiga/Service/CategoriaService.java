@@ -6,5 +6,5 @@ import com.accesadades.botiga.Model.Categoria;
 import java.util.Optional;
 
 public interface CategoriaService extends BotigaService<Categoria, Long> {
-    Optional<Category> findByDescCategoria(String desc);
+    Optional<Categoria> findByDescCategoria(String desc);
 }
