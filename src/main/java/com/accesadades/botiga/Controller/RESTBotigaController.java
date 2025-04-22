@@ -1,7 +1,6 @@
 package com.accesadades.botiga.Controller;
 
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.support.SessionStatus;
-
 import com.accesadades.botiga.Model.Product;
 import com.accesadades.botiga.Service.ProductService;
-
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
@@ -49,7 +46,7 @@ public class RESTBotigaController {
     }
 
     //api/botiga/LlistarProductes
-    @GetMapping("/LlistarProductes")
+    @GetMapping("api/botiga/LlistarProductes")
     public String llistarProductes() {
         botigaService.llistarProductes();
         return "productes";
@@ -105,7 +102,7 @@ public class RESTBotigaController {
     //api/botiga/LlistarSubcategories
     @GetMapping("api/botiga/LlistarSubcategories")
     public String llistarSubcategories() {
-        Set<SubcategoriesDTO> subcategoriaDTO = subcategoriaDTO.findAll();
+        Set<SubcategoriaDTO> subcategoriaDTO = subcategoriaDTO.findAll();
         return subcategoriaDTO.toString();  
     }
 
@@ -132,12 +129,12 @@ public class RESTBotigaController {
     @GetMapping("/api/botiga/LlistarSubcategoriesPerCategoria")
     public String llistarSubcategoriesPerCategoria(@RequestParam(name = "idCategoria", required = true) Long idCategoria) {
         try {
-            Set<SubcategoriesDTO> subcategoriaDTO = subcategoriaService.findById(idCategoria);
+            Set<SubcategoriaDTO> subcategoriaDTO = subcategoriaService.findById(idCategoria);
             return subcategoriaDTO.toString();  
         } catch (Exception e) { return "Error en llistar les subcategories per categoria: " + e.getMessage(); }
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/api/botiga/logout")
     public String logout(SessionStatus status) {
         status.setComplete();
         return "redirect:/";
