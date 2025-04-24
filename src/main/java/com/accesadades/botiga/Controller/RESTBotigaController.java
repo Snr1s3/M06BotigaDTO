@@ -172,15 +172,15 @@ public class RESTBotigaController {
     @PostMapping("api/botiga/inserirSubcategoria")
     public ResponseEntity<String> inserirSubcategoria(@RequestBody SubcategoriaDTO subcategoriaDTO) {
         try {
-            if (subcategoriaDTO.getDescSubcategoria() == null || subcategoriaDTO.getDescSubcategoria().isEmpty()) {
+            if (subcategoriaDTO.getDescripcion() == null || subcategoriaDTO.getDescripcion().isEmpty()) {
                 return ResponseEntity.badRequest().body("Error: La descripció de la subcategoria és obligatòria");
             }
             
-            if (subcategoriaDTO.getIdCategoria() == null) {
+            if (subcategoriaDTO.getId() == null) {
                 return ResponseEntity.badRequest().body("Error: Cal assignar la subcategoria a una categoria");
             }            
             SubcategoriaDTO saved = subcategoriaService.save(subcategoriaDTO);
-            if (saved != null && saved.getIdSubcategoria() != null) {
+            if (saved != null && saved.getId() != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Subcategoria inserida amb èxit");
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
