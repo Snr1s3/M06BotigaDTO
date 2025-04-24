@@ -33,3 +33,24 @@ CREATE TABLE products (
   CONSTRAINT fk_product_categoria FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria),
   CONSTRAINT fk_product_subcategoria FOREIGN KEY (id_subcategoria) REFERENCES subcategoria(id_subcategoria)
 );
+
+-- Insertar categorías
+INSERT INTO categoria (desc_categoria, status_categoria) 
+VALUES ('Electrónica', 'Activa');
+
+INSERT INTO categoria (desc_categoria, status_categoria) 
+VALUES ('Hogar', 'Activa');
+
+-- Insertar subcategorías
+INSERT INTO subcategoria (desc_subcategoria, status_subcategoria, id_categoria) 
+VALUES ('Teléfonos', 'Activa', 1);
+
+INSERT INTO subcategoria (desc_subcategoria, status_subcategoria, id_categoria) 
+VALUES ('Electrodomésticos', 'Activa', 2);
+
+-- Insertar productos
+INSERT INTO products (company, description, name, price, units, id_categoria, id_subcategoria) 
+VALUES ('Samsung', 'Teléfono inteligente Galaxy S21', 'Galaxy S21', 799.99, 50, 1, 1);
+
+INSERT INTO products (company, description, name, price, units, id_categoria, id_subcategoria) 
+VALUES ('LG', 'Refrigerador de alta capacidad', 'LG Fridge', 1200.00, 20, 2, 2);

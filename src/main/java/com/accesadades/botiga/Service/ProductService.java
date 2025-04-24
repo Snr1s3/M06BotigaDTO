@@ -1,6 +1,5 @@
 package com.accesadades.botiga.Service;
 import com.accesadades.botiga.DTO.ProductDTO;
-import com.accesadades.botiga.Model.Product;
 
 import java.util.Optional;
 import java.util.Set;
