@@ -20,7 +20,7 @@ import com.accesadades.botiga.DTO.CategoriaDTO;
 import com.accesadades.botiga.DTO.ProductDTO;
 import com.accesadades.botiga.DTO.SubcategoriaDTO;
 import com.accesadades.botiga.Model.Product;
-import com.accesadades.botiga.Service.BotigaService;
+// import com.accesadades.botiga.Service.BotigaService;
 import com.accesadades.botiga.Service.CategoriaService;
 import com.accesadades.botiga.Service.ProductService;
 import com.accesadades.botiga.Service.SubcategoriaService;
@@ -31,8 +31,8 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 @RequestMapping("/api/botiga")
 public class RESTBotigaController {
 
-    @Autowired
-    private BotigaService botigaService;
+    // @Autowired
+    // private BotigaService botigaService;
 
     @Autowired
     private ProductService productService;

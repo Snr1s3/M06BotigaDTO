@@ -14,6 +14,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Set<Product> findByNameAndPrice(String name, float price);
 
     Set<Product> findBySubcategory_Id(Long idSubcategoria);
-
-    Set<Product> findBySubcategory_Category_Id(Long idCategoria);
+    Set<Product> findBySubcategory_Categoria_Id(Long idCategoria);
 }

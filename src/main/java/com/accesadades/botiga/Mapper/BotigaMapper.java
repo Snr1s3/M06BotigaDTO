@@ -1,26 +1,27 @@
 package com.accesadades.botiga.Mapper;
 
 import com.accesadades.botiga.DTO.ProductDTO;
+import com.accesadades.botiga.Model.Product;
 import com.accesadades.botiga.DTO.CategoriaDTO;
-import com.accesadades.botiga.DTO.SubcategoriaDTO;
 import com.accesadades.botiga.Model.Categoria;
-import  com.accesadades.botiga.Model.Product;
+import com.accesadades.botiga.DTO.SubcategoriaDTO;
 import com.accesadades.botiga.Model.Subcategoria;
+import org.mapstruct.Mapper;
 
-public interface BotigaMapper{
+@Mapper(componentModel = "spring")
+public interface BotigaMapper {
     ProductDTO toDTO(Product producte);
 
     Product toEntity(ProductDTO dto);
 
-    CategoriaDTO toDTO(Categoria Categoria);
+    CategoriaDTO toDTO(Categoria categoria);
 
     Categoria toEntity(CategoriaDTO dto);
 
-    SubcategoriaDTO toDTO(Subcategoria producte);
+    SubcategoriaDTO toDTO(Subcategoria subcategoria);
 
     Subcategoria toEntity(SubcategoriaDTO dto);
 }
-
 
 
 

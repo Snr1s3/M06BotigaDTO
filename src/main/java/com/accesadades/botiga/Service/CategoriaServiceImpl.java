@@ -42,7 +42,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public Optional<CategoriaDTO> findByDescCategoria(String desc) {
-        return categoriaRepository.findByDescCategoria(desc)
+        return categoriaRepository.findByDescripcio(desc)
                 .map(mapper::toDTO);
     }
 
@@ -57,7 +57,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public boolean update(CategoriaDTO categoriaDTO) {
-        if (categoriaDTO.getId() == null || !categoriaRepository.existsById(categoriaDTO.getId())) {
+        if (categoriaDTO.getId() == null || !categoriaRepository.existsById((Long) categoriaDTO.getId())) {
             return false;
         }
         Categoria updatedCategoria = mapper.toEntity(categoriaDTO);
