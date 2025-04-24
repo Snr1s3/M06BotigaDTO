@@ -57,11 +57,20 @@ public class RESTBotigaController {
 
     //api/botiga/LlistarProductes
     @GetMapping("api/botiga/LlistarProductes")
-    public String llistarProductes() {
-        productService.findAll();
-        return "productes";
+    public ResponseEntity<?> llistarProductes() {
+        try {
+            Set<ProductDTO> productes = productService.findAll();
+            if (productes != null && !productes.isEmpty()) {
+                return ResponseEntity.ok(productes);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hi ha productes disponibles");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error en obtenir els productes: " + e.getMessage());
+        }
     }
-
     //api/botiga/CercaProductes?nom=...
     @GetMapping("/api/botiga/CercaProductes")
     public ResponseEntity<?> cercaProductes(@RequestParam(name = "nom", required = false) String productName) {
