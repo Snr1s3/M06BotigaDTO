@@ -1,5 +1,6 @@
 package com.accesadades.botiga.Model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "subcategories")
+@Table(name = "subcategoria")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,9 +24,10 @@ public class Subcategoria implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(name = "desc_subcategoria")
+    private String description;
 
     @ManyToOne
-    @JoinColumn(name = "categoria_id")
-    private Categoria category;
+    @JoinColumn(name = "id_categoria", referencedColumnName = "id")
+    private Categoria categoria;
 }

@@ -2,11 +2,14 @@ package com.accesadades.botiga.Service;
 
 import com.accesadades.botiga.Repository.SubcategoriaRepository;
 import com.accesadades.botiga.Model.Subcategoria;
+import com.accesadades.botiga.DTO.SubcategoriaDTO;
 import com.accesadades.botiga.Mapper.BotigaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class SubcategoriaServiceImpl implements SubcategoriaService {
@@ -15,25 +18,57 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
     private SubcategoriaRepository subcategoriaRepository;
 
     @Autowired
-    private BotigaMapper categoriaMapper;
+    private BotigaMapper mapper;
 
     @Override
-    public List<Subcategoria> findAll() {
-        return subcategoriaRepository.findAll();
+    public SubcategoriaDTO save(SubcategoriaDTO subcategoriaDTO) {
+        Subcategoria entity = mapper.toEntity(subcategoriaDTO);
+        Subcategoria saved = subcategoriaRepository.save(entity);
+        return mapper.toDTO(saved);
     }
 
     @Override
-    public Optional<Subcategoria> findById(Long id) {
-        return subcategoriaRepository.findById(id);
+    public Set<SubcategoriaDTO> findAll() {
+        return subcategoriaRepository.findAll().stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public Subcategoria save(Subcategoria entity) {
-        return subcategoriaRepository.save(entity);
+    public Optional<SubcategoriaDTO> findById(Long id) {
+        return subcategoriaRepository.findById(id)
+                .map(mapper::toDTO);
     }
 
     @Override
-    public void deleteById(Long id) {
-        subcategoriaRepository.deleteById(id);
+    public Optional<SubcategoriaDTO> findByDescSubcategoria(String desc) {
+        return subcategoriaRepository.findByDescSubcategoria(desc)
+                .map(mapper::toDTO);
+    }
+
+    @Override
+    public Set<SubcategoriaDTO> findAllByCategoriaId(Long idCategoria) {
+        return subcategoriaRepository.findByCategoria_Id(idCategoria).stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        if (subcategoriaRepository.existsById(id)) {
+            subcategoriaRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean update(SubcategoriaDTO subcategoriaDTO) {
+        if (subcategoriaDTO.getId() == null || !subcategoriaRepository.existsById(subcategoriaDTO.getId())) {
+            return false;
+        }
+        Subcategoria updated = mapper.toEntity(subcategoriaDTO);
+        subcategoriaRepository.save(updated);
+        return true;
     }
 }
