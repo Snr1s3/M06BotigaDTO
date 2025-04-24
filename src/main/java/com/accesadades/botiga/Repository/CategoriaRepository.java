@@ -2,9 +2,10 @@ package com.accesadades.botiga.Repository;
 
 import com.accesadades.botiga.Model.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
+@Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
-    Optional<Categoria> findByDescCategoria(String desc);
+    Optional<Categoria> findByDescCategoria(String descCategoria);
 }

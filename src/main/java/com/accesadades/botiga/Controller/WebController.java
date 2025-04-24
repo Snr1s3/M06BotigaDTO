@@ -23,7 +23,7 @@ public class WebController {
 
     @GetMapping("/catalog")
     public String catalog(Model model) {
-        Set<ProductDTO> products = productService.findAllProducts();
+        Set<ProductDTO> products = productService.findAll();
         model.addAttribute("products", products);
         return "catalog";
     }
@@ -33,7 +33,7 @@ public class WebController {
         return "search"; // carrega el formulari de cerca
     }
 
-    @PostMapping("/prodname")
+   /* @PostMapping("/prodname")
     public String searchProductByName(@RequestParam(value = "name", required = false) String name, Model model) {
         if (name != null && !name.trim().isEmpty()) {
             ProductDTO product = productService.findProductsByName(name);
@@ -44,5 +44,5 @@ public class WebController {
             }
         }
         return "search";
-    }
+    }*/
 }

@@ -9,7 +9,6 @@ import com.accesadades.botiga.Mapper.BotigaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,61 +20,73 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Autowired
-    private CategoriaRepository categoryRepository;
+    private CategoriaRepository categoriaRepository;
 
     @Autowired
-    private SubcategoriaRepository subcategoryRepository;
+    private SubcategoriaRepository subcategoriaRepository;
 
     @Autowired
-    private BotigaMapper productMapper;
+    private BotigaMapper mapper;
 
     @Override
-    public Set<ProductDTO> findAllProducts() {
+    public ProductDTO save(ProductDTO productDTO) {
+        Product product = mapper.toEntity(productDTO);
+        return mapper.toDTO(productRepository.save(product));
+    }
+
+    @Override
+    public Set<ProductDTO> findAll() {
         return productRepository.findAll().stream()
-                .map(productMapper::toDTO)
+                .map(mapper::toDTO)
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public ProductDTO findProductsByName(String name) {
+    public Optional<ProductDTO> findById(Long id) {
+        return productRepository.findById(id).map(mapper::toDTO);
+    }
+
+    @Override
+    public Set<ProductDTO> findProductsByName(String name) {
         Product product = productRepository.findByName(name);
-        return productMapper.toDTO(product);
+        if (product == null) {
+            return Set.of();
+        }
+        return Set.of(mapper.toDTO(product));
     }
 
     @Override
-    public Set<ProductDTO> findAllProductsBySubcategory(String subcategoryName) {
-        return productRepository.findAll().stream()
-                .filter(p -> p.getSubcategory() != null && p.getSubcategory().getName().equalsIgnoreCase(subcategoryName))
-                .map(productMapper::toDTO)
+    public Set<ProductDTO> findAllBySubcategoryId(Long idSubcategoria) {
+        return productRepository.findBySubcategory_Id(idSubcategoria).stream()
+                .map(mapper::toDTO)
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public Set<ProductDTO> findAllByCategoriaId(Long idCategoria) {
+        return productRepository.findBySubcategory_Category_Id(idCategoria).stream()
+                .map(mapper::toDTO)
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public Optional<Product> findById(Long id) {
-        return productRepository.findById(id);
-    }
-
-    @Override
-    public Product save(Product entity) {
-        if (entity.getSubcategory() == null || 
-            entity.getSubcategory().getCategory() == null || 
-            !categoryRepository.existsById(entity.getSubcategory().getCategory().getId())) {
-            throw new IllegalArgumentException("No existeix la categoria especificada.");
+    public boolean updatePrice(Long id, Long nouPreu) {
+        Optional<Product> optionalProduct = productRepository.findById(id);
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+            product.setPrice(nouPreu);
+            productRepository.save(product);
+            return true;
         }
-        if (!subcategoryRepository.existsById(entity.getSubcategory().getId())) {
-            throw new IllegalArgumentException("No existeix la subcategoria especificada.");
-        }
-
-        return productRepository.save(entity);
+        return false;
     }
 
     @Override
-    public void deleteById(Long id) {
-        productRepository.deleteById(id);
+    public boolean delete(Long id) {
+        if (productRepository.existsById(id)) {
+            productRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

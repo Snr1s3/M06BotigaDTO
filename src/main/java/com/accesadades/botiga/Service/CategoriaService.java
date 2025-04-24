@@ -1,10 +1,13 @@
 package com.accesadades.botiga.Service;
-
-import java.util.Locale.Category;
-
-import com.accesadades.botiga.Model.Categoria;
+import com.accesadades.botiga.DTO.CategoriaDTO;
 import java.util.Optional;
+import java.util.Set;
 
-public interface CategoriaService extends BotigaService<Categoria, Long> {
-    Optional<Categoria> findByDescCategoria(String desc);
+public interface CategoriaService {
+    CategoriaDTO save(CategoriaDTO categoriaDTO);
+    Set<CategoriaDTO> findAll();
+    Optional<CategoriaDTO> findById(Long id);
+    Optional<CategoriaDTO> findByDescCategoria(String desc);
+    boolean delete(Long id);
+    boolean update(CategoriaDTO categoriaDTO);
 }

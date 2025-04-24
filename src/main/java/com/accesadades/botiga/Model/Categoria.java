@@ -1,5 +1,6 @@
 package com.accesadades.botiga.Model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "categoria")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,5 +22,9 @@ public class Categoria implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "desc_categoria")
     private String name;
+
+    @Column(name = "status_categoria")
+    private String status;
 }

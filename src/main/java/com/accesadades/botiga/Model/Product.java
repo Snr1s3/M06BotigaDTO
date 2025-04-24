@@ -1,5 +1,4 @@
 package com.accesadades.botiga.Model;
-
 import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,7 +13,7 @@ public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long product_id;
+    private Long productId;
 
     @Column
     private String name;
@@ -26,10 +25,10 @@ public class Product implements Serializable {
     private String company;
 
     @Column
-    private float price;
+    private Long price;
 
     @Column
-    private long units;
+    private Long units;
 
     @Column(name = "creation_at")
     private LocalDateTime creationDate;

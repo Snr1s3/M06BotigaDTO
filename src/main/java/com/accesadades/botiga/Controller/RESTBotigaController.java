@@ -1,6 +1,8 @@
 package com.accesadades.botiga.Controller;
 
+import java.util.Optional;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,14 +51,14 @@ public class RESTBotigaController {
     //api/botiga/inserirProducte
     @PostMapping("/api/botiga/inserirProductes")
     public String inserirProducte (@RequestBody ProductDTO productDTO) {
-        productService.inserirProducte(productDTO);
+        productService.save(productDTO);
         return "producte inserit";  
     }
 
     //api/botiga/LlistarProductes
     @GetMapping("api/botiga/LlistarProductes")
     public String llistarProductes() {
-        productService.llistarProductes();
+        productService.findAll();
         return "productes";
     }
 
@@ -65,10 +67,12 @@ public class RESTBotigaController {
     public ResponseEntity<?> cercaProductes(@RequestParam(name = "nom", required = false) String productName) {
         try {
             Set<ProductDTO> productDTO = productService.findProductsByName(productName);
-            return productDTO
-                .map(product -> ResponseEntity.ok(product.toString()))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("No hi ha cap llibre amb aquesta id"));
+            if (productDTO != null && !productDTO.isEmpty()) {
+                return ResponseEntity.ok(productDTO);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hi ha cap producte amb aquest nom");
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Nom no vàlid");
         }
@@ -110,7 +114,7 @@ public class RESTBotigaController {
     //api/botiga/LlistarSubcategories
     @GetMapping("api/botiga/LlistarSubcategories")
     public String llistarSubcategories() {
-        Set<SubcategoriaDTO> subcategoriaDTO = subcategoriaDTO.findAll();
+        Set<SubcategoriaDTO> subcategoriaDTO = subcategoriaService.findAll();
         return subcategoriaDTO.toString();  
     }
 
@@ -128,7 +132,7 @@ public class RESTBotigaController {
     @GetMapping("api/botiga/LlistarProductesPerCategoria")
     public String llistarProductesPerCategoria(@RequestParam(name = "idCategoria", required = true) Long idCategoria) {
         try {
-            Set<ProductDTO> producteDTO = productService.findAllProductsBySubcategory(idCategoria);
+            Set<ProductDTO> producteDTO = productService.findAllByCategoriaId(idCategoria);
             return producteDTO.toString();  
         } catch (Exception e) { return "Error en llistar els productes per categoria: " + e.getMessage(); }
     }
@@ -137,7 +141,7 @@ public class RESTBotigaController {
     @GetMapping("/api/botiga/LlistarSubcategoriesPerCategoria")
     public String llistarSubcategoriesPerCategoria(@RequestParam(name = "idCategoria", required = true) Long idCategoria) {
         try {
-            Set<SubcategoriaDTO> subcategoriaDTO = subcategoriaService.findById(idCategoria);
+            Optional<SubcategoriaDTO> subcategoriaDTO = subcategoriaService.findById(idCategoria);
             return subcategoriaDTO.toString();  
         } catch (Exception e) { return "Error en llistar les subcategories per categoria: " + e.getMessage(); }
     }
