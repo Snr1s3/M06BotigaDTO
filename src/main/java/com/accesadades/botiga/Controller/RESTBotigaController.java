@@ -51,6 +51,7 @@ public class RESTBotigaController {
     //api/botiga/inserirProducte
     @PostMapping("/api/botiga/inserirProductes")
     public ResponseEntity<String> inserirProducte(@RequestBody ProductDTO productDTO) {
+        System.out.println(productDTO);
         try {
             if (productDTO.getName() == null || productDTO.getName().isEmpty()) {
                 return ResponseEntity.badRequest().body("Error: El nom del producte és obligatori");

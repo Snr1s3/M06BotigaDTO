@@ -1,8 +1,10 @@
 package com.accesadades.botiga.DTO;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public class ProductDTO {
     private Long productId;
     private String name;
