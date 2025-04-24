@@ -38,6 +38,9 @@ L’aplicació segueix:
 ### Endpoints de l'API
 L’API proporciona els següents endpoints:
 
+![alt text](images/image15.png)
+
+
 #### Productes
 
 - GET /api/botiga/LlistarProductes: 
@@ -68,8 +71,23 @@ Preu canviat:
 
 ![alt text](images/image7.png)
 
-POST /api/botiga/EliminarProducte?id=...: Elimina un producte
-GET /api/botiga/LlistarProductesPerCategoria?idCategoria=...: Llista els productes d’una categoria
+- POST /api/botiga/EliminarProducte?id=...: 
+
+Elimina un producte, primerament existeix un producte amb id = 1
+
+![alt text](images/image10.png)
+
+Despres, s'elimina aquest producte amb id = 1
+
+![alt text](images/image11.png)
+
+Despues se confirma que se elimine correctamente al listar todos los productos:
+
+![alt text](images/image12.png)
+
+- GET /api/botiga/LlistarProductesPerCategoria?idCategoria=...: Llista els productes d’una categoria
+
+![alt text](images/image13.png)
 
 #### Categories
 
@@ -98,4 +116,8 @@ Insereix una nova subcategoria con id = 1
 ![alt text](images/image1.png)
 
 
-GET /api/botiga/LlistarSubcategoriesPerCategoria?idCategoria=...: Llista subcategories d’una categoria
+- GET /api/botiga/LlistarSubcategoriesPerCategoria?idCategoria=...: 
+
+Llista subcategories d’una categoria, en aquest cas nomes es mostra l'unica subcategoria amb categoria id = 1
+
+![alt text](images/image14.png)
