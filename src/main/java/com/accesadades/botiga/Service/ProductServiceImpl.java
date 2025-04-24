@@ -64,7 +64,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Set<ProductDTO> findAllByCategoriaId(Long idCategoria) {
-        return productRepository.findBySubcategory_Category_Id(idCategoria).stream()
+        return productRepository.findBySubcategory_Categoria_Id(idCategoria).stream()
                 .map(mapper::toDTO)
                 .collect(Collectors.toSet());
     }

@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class SubcategoriaDTO {
-    private String name;
-    private String desc_Subcategoria;
-    private String status_Subcategoria;
-    private CategoriaDTO categoria;
+    private Long id;
+    private String nombre;
+    private String descripcion;
+    private Long categoriaId;
 }
