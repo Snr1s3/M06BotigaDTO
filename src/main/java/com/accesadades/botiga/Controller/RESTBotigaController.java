@@ -1,17 +1,13 @@
 package com.accesadades.botiga.Controller;
 
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.support.SessionStatus;
@@ -19,14 +15,11 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.accesadades.botiga.DTO.CategoriaDTO;
 import com.accesadades.botiga.DTO.ProductDTO;
 import com.accesadades.botiga.DTO.SubcategoriaDTO;
-import com.accesadades.botiga.Model.Product;
-// import com.accesadades.botiga.Service.BotigaService;
 import com.accesadades.botiga.Service.CategoriaService;
 import com.accesadades.botiga.Service.ProductService;
 import com.accesadades.botiga.Service.SubcategoriaService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-
+import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/api/botiga")
 public class RESTBotigaController {
@@ -132,14 +125,21 @@ public class RESTBotigaController {
     //api/botiga/inserirCategoria
     @PostMapping("api/botiga/inserirCategoria")
     public ResponseEntity<String> inserirCategoria(@RequestBody CategoriaDTO categoriaDTO) {
+        System.out.println(categoriaDTO);
         try {
             if (categoriaDTO.getDescCategoria() == null || categoriaDTO.getDescCategoria().isEmpty()) {
                 return ResponseEntity.badRequest().body("Error: La descripció de la categoria és obligatòria");
             }
-            
-            // Guardar la categoria
+
+            if (categoriaDTO.getStatusCategoria() == null || categoriaDTO.getStatusCategoria().isEmpty()) {
+                return ResponseEntity.badRequest().body("Error: L'estat de la categoria és obligatori");
+            }
+
+            if (categoriaDTO.getId() != null) {
+                return ResponseEntity.badRequest().body("Error: No es pot especificar un ID per a una nova categoria");
+            }
             CategoriaDTO saved = categoriaService.save(categoriaDTO);
-            
+
             if (saved != null && saved.getId() != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Categoria inserida amb èxit");
             } else {
@@ -172,15 +172,14 @@ public class RESTBotigaController {
     //api/botiga/inserirSubcategoria
     @PostMapping("api/botiga/inserirSubcategoria")
     public ResponseEntity<String> inserirSubcategoria(@RequestBody SubcategoriaDTO subcategoriaDTO) {
+        System.out.println(subcategoriaDTO);
         try {
-            if (subcategoriaDTO.getDescripcion() == null || subcategoriaDTO.getDescripcion().isEmpty()) {
-                return ResponseEntity.badRequest().body("Error: La descripció de la subcategoria és obligatòria");
+            if (subcategoriaDTO.getCategoriaId() == null) {
+                return ResponseEntity.badRequest().body("Error: Cal assignar la subcategoria a una categoria.");
             }
-            
-            if (subcategoriaDTO.getId() == null) {
-                return ResponseEntity.badRequest().body("Error: Cal assignar la subcategoria a una categoria");
-            }            
+    
             SubcategoriaDTO saved = subcategoriaService.save(subcategoriaDTO);
+    
             if (saved != null && saved.getId() != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Subcategoria inserida amb èxit");
             } else {

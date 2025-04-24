@@ -22,8 +22,13 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public CategoriaDTO save(CategoriaDTO categoriaDTO) {
+        if (categoriaDTO.getId() != null && categoriaRepository.existsById(categoriaDTO.getId())) {
+            throw new IllegalArgumentException("La categoría ya existe con el ID proporcionado.");
+        }
+        System.out.println(categoriaDTO);
         Categoria categoria = mapper.toEntity(categoriaDTO);
-        return mapper.toDTO(categoriaRepository.save(categoria));
+        Categoria savedCategoria = categoriaRepository.save(categoria);
+        return mapper.toDTO(savedCategoria);
     }
 
     @Override
