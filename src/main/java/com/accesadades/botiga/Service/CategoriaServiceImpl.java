@@ -30,7 +30,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     public Set<CategoriaDTO> findAll() {
         return categoriaRepository.findAll()
                 .stream()
-                .map(mapper::toDTO)
+                .map(mapper::toDTO) 
                 .collect(Collectors.toSet());
     }
 
