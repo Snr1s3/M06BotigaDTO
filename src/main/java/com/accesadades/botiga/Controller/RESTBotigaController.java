@@ -45,14 +45,30 @@ public class RESTBotigaController {
 
     @GetMapping("/")
     public String iniciar() {
-        return "API BIBLIOTECA";
+        return "API BOTIGA";
     }
 
     //api/botiga/inserirProducte
     @PostMapping("/api/botiga/inserirProductes")
-    public String inserirProducte (@RequestBody ProductDTO productDTO) {
-        productService.save(productDTO);
-        return "producte inserit";  
+    public ResponseEntity<String> inserirProducte(@RequestBody ProductDTO productDTO) {
+        try {
+            if (productDTO.getName() == null || productDTO.getName().isEmpty()) {
+                return ResponseEntity.badRequest().body("Error: El nom del producte és obligatori");
+            }
+            if (productDTO.getPrice() == null || productDTO.getPrice() <= 0) {
+                return ResponseEntity.badRequest().body("Error: El preu ha de ser superior a 0");
+            }            
+            ProductDTO saved = productService.save(productDTO);
+            if (saved != null && saved.getProductId() != null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Producte inserit amb èxit");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("No s'ha pogut inserir el producte per un error desconegut");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error en inserir el producte: " + e.getMessage());
+        }
     }
 
     //api/botiga/LlistarProductes
@@ -75,84 +91,173 @@ public class RESTBotigaController {
     @GetMapping("/api/botiga/CercaProductes")
     public ResponseEntity<?> cercaProductes(@RequestParam(name = "nom", required = false) String productName) {
         try {
-            Set<ProductDTO> productDTO = productService.findProductsByName(productName);
-            if (productDTO != null && !productDTO.isEmpty()) {
-                return ResponseEntity.ok(productDTO);
+            if (productName == null || productName.trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                    .body("Error: Cal proporcionar un nom de producte per a la cerca");
+            }
+            Set<ProductDTO> products = productService.findProductsByName(productName);            
+            if (products != null && !products.isEmpty()) {
+                return ResponseEntity.ok(products);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No hi ha cap producte amb aquest nom");
+                    .body("No hi ha cap producte que contingui '" + productName + "' al seu nom");
             }
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Nom no vàlid");
-        }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error en cercar productes: " + e.getMessage());
+            }
     }
 
     //api/botiga/ModificarPreu?id=...&nouPreu=...
     @PostMapping("/api/botiga/ModificarPreu")
-    public String modificarPreu( @RequestParam(name = "id", required = true) Long id, @RequestParam(name = "nouPreu", required = true) Long nouPreu) {
+    public ResponseEntity<String> modificarPreu( @RequestParam(name = "id", required = true) Long id, @RequestParam(name = "nouPreu", required = true) Long nouPreu) {
         try {
+            if (nouPreu <= 0) {
+                return ResponseEntity.badRequest().body("Error: El preu ha de ser superior a 0");
+            }            
             boolean updated = productService.updatePrice(id, nouPreu);
-            if (updated) { return "Preu actualitzat correctament"; } 
-            else { return "No s'ha trobat cap producte amb aquesta ID";}
+            if (updated) {
+                return ResponseEntity.ok("Preu actualitzat correctament");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No s'ha trobat cap producte amb aquesta ID");
+            }
         } catch (Exception e) {
-            return "Error en actualitzar el preu: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error en actualitzar el preu: " + e.getMessage());
         }
     }
 
     //api/botiga/inserirCategoria
     @PostMapping("api/botiga/inserirCategoria")
-    public String inserirCategoria(@RequestBody CategoriaDTO categoriaDTO) {
-        categoriaService.save(categoriaDTO);    
-        return "categoria";  
+    public ResponseEntity<String> inserirCategoria(@RequestBody CategoriaDTO categoriaDTO) {
+        try {
+            if (categoriaDTO.getDescCategoria() == null || categoriaDTO.getDescCategoria().isEmpty()) {
+                return ResponseEntity.badRequest().body("Error: La descripció de la categoria és obligatòria");
+            }
+            
+            // Guardar la categoria
+            CategoriaDTO saved = categoriaService.save(categoriaDTO);
+            
+            if (saved != null && saved.getIdCategoria() != null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Categoria inserida amb èxit");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("No s'ha pogut inserir la categoria per un error desconegut");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error en inserir la categoria: " + e.getMessage());
+        }
     }
 
     //api/botiga/LlistarCategories
     @GetMapping("api/botiga/LlistarCategories")
-    public String llistarCategories() {
-        Set<CategoriaDTO> categoriaDTO = categoriaService.findAll();
-        return categoriaDTO.toString();  
+    public ResponseEntity<?> llistarCategories() {
+        try {
+            Set<CategoriaDTO> categories = categoriaService.findAll();
+            if (categories != null && !categories.isEmpty()) {
+                return ResponseEntity.ok(categories);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hi ha categories disponibles");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error en obtenir les categories: " + e.getMessage());
+        }
     }
 
     //api/botiga/inserirSubcategoria
     @PostMapping("api/botiga/inserirSubcategoria")
-    public String inserirSubcategoria(@RequestBody SubcategoriaDTO subcategoriaDTO) {
-        subcategoriaService.save(subcategoriaDTO); 
-        return "subcategoria inserida amb èxit";
+    public ResponseEntity<String> inserirSubcategoria(@RequestBody SubcategoriaDTO subcategoriaDTO) {
+        try {
+            if (subcategoriaDTO.getDescSubcategoria() == null || subcategoriaDTO.getDescSubcategoria().isEmpty()) {
+                return ResponseEntity.badRequest().body("Error: La descripció de la subcategoria és obligatòria");
+            }
+            
+            if (subcategoriaDTO.getIdCategoria() == null) {
+                return ResponseEntity.badRequest().body("Error: Cal assignar la subcategoria a una categoria");
+            }            
+            SubcategoriaDTO saved = subcategoriaService.save(subcategoriaDTO);
+            if (saved != null && saved.getIdSubcategoria() != null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Subcategoria inserida amb èxit");
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("No s'ha pogut inserir la subcategoria per un error desconegut");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error en inserir la subcategoria: " + e.getMessage());
+        }
     }
 
     //api/botiga/LlistarSubcategories
     @GetMapping("api/botiga/LlistarSubcategories")
-    public String llistarSubcategories() {
-        Set<SubcategoriaDTO> subcategoriaDTO = subcategoriaService.findAll();
-        return subcategoriaDTO.toString();  
+    public ResponseEntity<?> llistarSubcategories() {
+        try {
+            Set<SubcategoriaDTO> subcategories = subcategoriaService.findAll();
+            if (subcategories != null && !subcategories.isEmpty()) {
+                return ResponseEntity.ok(subcategories);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hi ha subcategories disponibles");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error en obtenir les subcategories: " + e.getMessage());
+        }
     }
 
     ///api/botiga/EliminarProducte?id=...
     @PostMapping("api/botiga/EliminarProducte")
-    public String eliminarProducte(@RequestParam(name = "id", required = true) Long id) {
+    public ResponseEntity<String> eliminarProducte(@RequestParam(name = "id", required = true) Long id) {
         try {
             boolean deleted = productService.delete(id);
-            if (deleted) { return "Producte eliminat correctament"; } 
-            else { return "No s'ha trobat cap producte amb aquesta ID"; }
-        } catch (Exception e) { return "Error en eliminar el producte: " + e.getMessage(); }
+            if (deleted) {
+                return ResponseEntity.ok("Producte eliminat correctament");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No s'ha trobat cap producte amb aquesta ID: " + id);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error en eliminar el producte: " + e.getMessage());
+        }
     }
 
     ///api/botiga/LlistarProductesPerCategoria?idCategoria=...
     @GetMapping("api/botiga/LlistarProductesPerCategoria")
-    public String llistarProductesPerCategoria(@RequestParam(name = "idCategoria", required = true) Long idCategoria) {
+    public ResponseEntity<?> llistarProductesPerCategoria(@RequestParam(name = "idCategoria", required = true) Long idCategoria) {
         try {
-            Set<ProductDTO> producteDTO = productService.findAllByCategoriaId(idCategoria);
-            return producteDTO.toString();  
-        } catch (Exception e) { return "Error en llistar els productes per categoria: " + e.getMessage(); }
+            Set<ProductDTO> productes = productService.findAllByCategoriaId(idCategoria);
+            if (productes != null && !productes.isEmpty()) {
+                return ResponseEntity.ok(productes);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hi ha productes disponibles per la categoria amb ID: " + idCategoria);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error en llistar els productes per categoria: " + e.getMessage());
+        }
     }
 
     ///api/botiga/LlistarSubcategoriesPerCategoria?idCategoria=...
     @GetMapping("/api/botiga/LlistarSubcategoriesPerCategoria")
-    public String llistarSubcategoriesPerCategoria(@RequestParam(name = "idCategoria", required = true) Long idCategoria) {
+    public ResponseEntity<?> llistarSubcategoriesPerCategoria(@RequestParam(name = "idCategoria", required = true) Long idCategoria) {
         try {
-            Optional<SubcategoriaDTO> subcategoriaDTO = subcategoriaService.findById(idCategoria);
-            return subcategoriaDTO.toString();  
-        } catch (Exception e) { return "Error en llistar les subcategories per categoria: " + e.getMessage(); }
+            Set<SubcategoriaDTO> subcategories = subcategoriaService.findAllByCategoriaId(idCategoria);
+            if (subcategories != null && !subcategories.isEmpty()) {
+                return ResponseEntity.ok(subcategories);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No hi ha subcategories disponibles per la categoria amb ID: " + idCategoria);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error en llistar les subcategories per categoria: " + e.getMessage());
+        }
     }
 
     @PostMapping("/api/botiga/logout")
