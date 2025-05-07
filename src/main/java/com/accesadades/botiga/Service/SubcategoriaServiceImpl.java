@@ -28,19 +28,11 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
         if (subcategoriaDTO.getCategoriaId() == null || subcategoriaDTO.getCategoriaId() == null) {
             throw new IllegalArgumentException("Cal assignar la subcategoria a una categoria.");
         }
-
-        // Verificar que la categoría existe
         Categoria categoria = categoriaRepository.findById(subcategoriaDTO.getCategoriaId())
                 .orElseThrow(() -> new IllegalArgumentException("La categoria especificada no existeix."));
-
-        // Convertir DTO a entidad
         Subcategoria subcategoria = mapper.toEntity(subcategoriaDTO);
         subcategoria.setCategoria(categoria);
-
-        // Guardar la subcategoría
         Subcategoria savedSubcategoria = subcategoriaRepository.save(subcategoria);
-
-        // Convertir la entidad guardada a DTO y devolverla
         return mapper.toDTO(savedSubcategoria);
     }
 
@@ -81,8 +73,10 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
 
     @Override
     public boolean update(SubcategoriaDTO subcategoriaDTO) {
-        if (subcategoriaDTO.getId() == null || !subcategoriaRepository.existsById(subcategoriaDTO.getId())) {
-            return false;
+        if (subcategoriaDTO == null || 
+            subcategoriaDTO.getCategoriaId() == null || 
+            !subcategoriaRepository.existsById(subcategoriaDTO.getCategoriaId())) {
+            throw new IllegalArgumentException("La subcategoría especificada no existe.");
         }
         Subcategoria updated = mapper.toEntity(subcategoriaDTO);
         subcategoriaRepository.save(updated);

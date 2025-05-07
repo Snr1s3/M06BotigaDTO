@@ -27,6 +27,5 @@ public class Categoria implements Serializable {
 
     @Column(name = "status_categoria")
     private String status;
-
     
 }

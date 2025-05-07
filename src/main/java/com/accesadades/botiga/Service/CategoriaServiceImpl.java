@@ -22,14 +22,32 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public CategoriaDTO save(CategoriaDTO categoriaDTO) {
-        if (categoriaDTO.getId() != null && categoriaRepository.existsById(categoriaDTO.getId())) {
-            throw new IllegalArgumentException("La categoría ya existe con el ID proporcionado.");
+        if (categoriaRepository.findByDescripcio(categoriaDTO.getDescripcio()).isPresent()) {
+            throw new IllegalArgumentException("La categoría ya existe con esa descripción.");
         }
+    
         System.out.println(categoriaDTO);
         Categoria categoria = mapper.toEntity(categoriaDTO);
         Categoria savedCategoria = categoriaRepository.save(categoria);
         return mapper.toDTO(savedCategoria);
     }
+    
+    @Override
+    public boolean update(CategoriaDTO categoriaDTO) {
+        if (categoriaDTO == null) {
+            return false;
+        }
+        Optional<Categoria> existing = categoriaRepository.findByDescripcio(categoriaDTO.getDescripcio());
+        if (existing.isPresent()) {
+            Categoria toUpdate = existing.get();
+            toUpdate.setStatus(categoriaDTO.getStatus());
+            categoriaRepository.save(toUpdate);
+            return true;
+        }
+    
+        return false;
+    }
+    
 
     @Override
     public Set<CategoriaDTO> findAll() {
@@ -58,15 +76,5 @@ public class CategoriaServiceImpl implements CategoriaService {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public boolean update(CategoriaDTO categoriaDTO) {
-        if (categoriaDTO.getId() == null || !categoriaRepository.existsById((Long) categoriaDTO.getId())) {
-            return false;
-        }
-        Categoria updatedCategoria = mapper.toEntity(categoriaDTO);
-        categoriaRepository.save(updatedCategoria);
-        return true;
     }
 }

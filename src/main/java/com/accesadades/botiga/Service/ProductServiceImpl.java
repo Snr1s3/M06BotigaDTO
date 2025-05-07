@@ -29,17 +29,14 @@ public class ProductServiceImpl implements ProductService {
     private BotigaMapper mapper;
 
     @Override
-public ProductDTO save(ProductDTO productDTO) {
-    if (productDTO.getCategoria() == null || !categoriaRepository.existsById(productDTO.getCategoria().getId())) {
-        throw new IllegalArgumentException("La categoría especificada no existe.");
+    public ProductDTO save(ProductDTO productDTO) {
+        if (productDTO.getSubcategoriaId() == null || !subcategoriaRepository.existsById(productDTO.getSubcategoriaId())) {
+            throw new IllegalArgumentException("La subcategoría especificada no existe.");
+        }
+        Product product = mapper.toEntity(productDTO);
+        Product savedProduct = productRepository.save(product);
+        return mapper.toDTO(savedProduct);
     }
-    if (productDTO.getSubcategoria() == null || !subcategoriaRepository.existsById(productDTO.getSubcategoria().getId())) {
-        throw new IllegalArgumentException("La subcategoría especificada no existe.");
-    }
-    Product product = mapper.toEntity(productDTO);
-    Product savedProduct = productRepository.save(product);
-    return mapper.toDTO(savedProduct);
-}
 
     @Override
     public Set<ProductDTO> findAll() {
