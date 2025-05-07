@@ -1,6 +1,8 @@
 package com.accesadades.botiga.Service;
 
+import com.accesadades.botiga.Repository.CategoriaRepository;
 import com.accesadades.botiga.Repository.SubcategoriaRepository;
+import com.accesadades.botiga.Model.Categoria;
 import com.accesadades.botiga.Model.Subcategoria;
 import com.accesadades.botiga.DTO.SubcategoriaDTO;
 import com.accesadades.botiga.Mapper.BotigaMapper;
@@ -16,15 +18,30 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
 
     @Autowired
     private SubcategoriaRepository subcategoriaRepository;
-
+    @Autowired
+    private CategoriaRepository categoriaRepository;
     @Autowired
     private BotigaMapper mapper;
 
     @Override
     public SubcategoriaDTO save(SubcategoriaDTO subcategoriaDTO) {
-        Subcategoria entity = mapper.toEntity(subcategoriaDTO);
-        Subcategoria saved = subcategoriaRepository.save(entity);
-        return mapper.toDTO(saved);
+        if (subcategoriaDTO.getCategoriaId() == null || subcategoriaDTO.getCategoriaId() == null) {
+            throw new IllegalArgumentException("Cal assignar la subcategoria a una categoria.");
+        }
+
+        // Verificar que la categoría existe
+        Categoria categoria = categoriaRepository.findById(subcategoriaDTO.getCategoriaId())
+                .orElseThrow(() -> new IllegalArgumentException("La categoria especificada no existeix."));
+
+        // Convertir DTO a entidad
+        Subcategoria subcategoria = mapper.toEntity(subcategoriaDTO);
+        subcategoria.setCategoria(categoria);
+
+        // Guardar la subcategoría
+        Subcategoria savedSubcategoria = subcategoriaRepository.save(subcategoria);
+
+        // Convertir la entidad guardada a DTO y devolverla
+        return mapper.toDTO(savedSubcategoria);
     }
 
     @Override
