@@ -15,6 +15,9 @@ import org.springframework.web.bind.support.SessionStatus;
 import com.accesadades.botiga.DTO.CategoriaDTO;
 import com.accesadades.botiga.DTO.ProductDTO;
 import com.accesadades.botiga.DTO.SubcategoriaDTO;
+import com.accesadades.botiga.Model.Categoria;
+import com.accesadades.botiga.Model.Subcategoria;
+import com.accesadades.botiga.Repository.CategoriaRepository;
 import com.accesadades.botiga.Service.CategoriaService;
 import com.accesadades.botiga.Service.ProductService;
 import com.accesadades.botiga.Service.SubcategoriaService;
@@ -33,6 +36,10 @@ public class RESTBotigaController {
 
     @Autowired
     private SubcategoriaService subcategoriaService;
+
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
 
     @GetMapping("/")
     public String iniciar() {
@@ -164,12 +171,11 @@ public class RESTBotigaController {
     @PostMapping("api/botiga/inserirSubcategoria")
     public ResponseEntity<String> inserirSubcategoria(@RequestBody SubcategoriaDTO subcategoriaDTO) {
         try {
-            if (subcategoriaDTO.getCategoriaId() == null) {
+            if (subcategoriaDTO.getCategoria() == null || subcategoriaDTO.getCategoria().getNombre() == null) {
                 return ResponseEntity.badRequest().body("Error: Cal assignar la subcategoria a una categoria.");
             }
-
             SubcategoriaDTO saved = subcategoriaService.save(subcategoriaDTO);
-
+    
             if (saved != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Subcategoria inserida amb èxit");
             } else {
@@ -181,6 +187,7 @@ public class RESTBotigaController {
                     .body("Error en inserir la subcategoria: " + e.getMessage());
         }
     }
+    
 
     // api/botiga/LlistarSubcategories
     @GetMapping("api/botiga/LlistarSubcategories")
@@ -216,22 +223,23 @@ public class RESTBotigaController {
         }
     }
 
-    // api/botiga/LlistarProductesPerCategoria?idCategoria=...
+    // api/botiga/LlistarProductesPerCategoria?nombreCategoria=...
     @GetMapping("api/botiga/LlistarProductesPerCategoria")
-    public ResponseEntity<?> llistarProductesPerCategoria(@RequestParam(name = "idCategoria", required = true) Long idCategoria) {
+    public ResponseEntity<?> llistarProductesPerCategoria(@RequestParam(name = "nomCategoria", required = true) String nomCategoria) {
         try {
-            Set<ProductDTO> productes = productService.findAllByCategoriaId(idCategoria);
+            Set<ProductDTO> productes = productService.findAllByCategoriaNom(nomCategoria);
             if (productes != null && !productes.isEmpty()) {
                 return ResponseEntity.ok(productes);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("No hi ha productes disponibles per la categoria amb ID: " + idCategoria);
+                        .body("No hi ha productes disponibles per la categoria amb nom: " + nomCategoria);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error en llistar els productes per categoria: " + e.getMessage());
         }
     }
+    
 
     // api/botiga/LlistarSubcategoriesPerCategoria?idCategoria=...
     @GetMapping("/api/botiga/LlistarSubcategoriesPerCategoria")

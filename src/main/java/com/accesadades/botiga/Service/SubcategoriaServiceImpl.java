@@ -25,16 +25,18 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
 
     @Override
     public SubcategoriaDTO save(SubcategoriaDTO subcategoriaDTO) {
-        if (subcategoriaDTO.getCategoriaId() == null || subcategoriaDTO.getCategoriaId() == null) {
-            throw new IllegalArgumentException("Cal assignar la subcategoria a una categoria.");
+        if (subcategoriaDTO.getCategoria() == null || subcategoriaDTO.getCategoria().getNombre() == null) {
+            throw new IllegalArgumentException("Cal assignar la subcategoria a una categoria amb nom.");
         }
-        Categoria categoria = categoriaRepository.findById(subcategoriaDTO.getCategoriaId())
-                .orElseThrow(() -> new IllegalArgumentException("La categoria especificada no existeix."));
+    
+        Categoria categoria = categoriaRepository.findByNombre(subcategoriaDTO.getCategoria().getNombre())
+            .orElseThrow(() -> new IllegalArgumentException("La categoria especificada no existeix."));
+    
         Subcategoria subcategoria = mapper.toEntity(subcategoriaDTO);
         subcategoria.setCategoria(categoria);
         Subcategoria savedSubcategoria = subcategoriaRepository.save(subcategoria);
         return mapper.toDTO(savedSubcategoria);
-    }
+    }    
 
     @Override
     public Set<SubcategoriaDTO> findAll() {
@@ -73,13 +75,18 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
 
     @Override
     public boolean update(SubcategoriaDTO subcategoriaDTO) {
-        if (subcategoriaDTO == null || 
-            subcategoriaDTO.getCategoriaId() == null || 
-            !subcategoriaRepository.existsById(subcategoriaDTO.getCategoriaId())) {
-            throw new IllegalArgumentException("La subcategoría especificada no existe.");
+        if (subcategoriaDTO == null || subcategoriaDTO.getCategoria() == null || subcategoriaDTO.getCategoria().getNombre() == null) {
+            throw new IllegalArgumentException("La subcategoría debe estar asociada a una categoría válida.");
         }
-        Subcategoria updated = mapper.toEntity(subcategoriaDTO);
-        subcategoriaRepository.save(updated);
+    
+        Categoria categoria = categoriaRepository.findByNombre(subcategoriaDTO.getCategoria().getNombre())
+            .orElseThrow(() -> new IllegalArgumentException("La categoría especificada no existe."));
+
+        Subcategoria subcategoria = mapper.toEntity(subcategoriaDTO);
+        subcategoria.setCategoria(categoria);
+        
+        subcategoriaRepository.save(subcategoria);
         return true;
     }
+    
 }

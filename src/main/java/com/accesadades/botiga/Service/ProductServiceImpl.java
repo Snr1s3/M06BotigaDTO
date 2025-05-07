@@ -6,13 +6,16 @@ import com.accesadades.botiga.Repository.ProductRepository;
 import com.accesadades.botiga.Mapper.BotigaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    @Autowired
+    private BotigaMapper botigaMapper;
 
     @Autowired
     private ProductRepository productRepository;
@@ -49,19 +52,22 @@ public class ProductServiceImpl implements ProductService {
         return Set.of(mapper.toDTO(product));
     }
 
-    @Override
-    public Set<ProductDTO> findAllBySubcategoryId(Long idSubcategoria) {
-        return productRepository.findBySubcategory_Id(idSubcategoria).stream()
-                .map(mapper::toDTO)
-                .collect(Collectors.toSet());
-    }
+    // @Override
+    // public Set<ProductDTO> findAllBySubcategoryId(Long idSubcategoria) {
+    //     return productRepository.findBySubcategory_Id(idSubcategoria).stream()
+    //             .map(mapper::toDTO)
+    //             .collect(Collectors.toSet());
+    // }
 
     @Override
-    public Set<ProductDTO> findAllByCategoriaId(Long idCategoria) {
-        return productRepository.findBySubcategory_Categoria_Id(idCategoria).stream()
-                .map(mapper::toDTO)
+    public Set<ProductDTO> findAllByCategoriaNom(String nombreCategoria) {
+        List<Product> productes = productRepository.findByCategoria_Nombre(nombreCategoria);
+        return productes.stream()
+                .map(botigaMapper::toDTO)
                 .collect(Collectors.toSet());
     }
+    
+    
 
     @Override
     public boolean updatePrice(Long id, Long nouPreu) {

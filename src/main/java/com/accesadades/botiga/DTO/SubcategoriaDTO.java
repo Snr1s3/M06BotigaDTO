@@ -8,5 +8,5 @@ import lombok.ToString;
 public class SubcategoriaDTO {
     private String nombre;
     private String descripcion;
-    private Long categoriaId;
+    private CategoriaDTO categoria;
 }

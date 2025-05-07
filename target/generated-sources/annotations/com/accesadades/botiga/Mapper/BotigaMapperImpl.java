@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-07T23:47:15+0200",
+    date = "2025-05-07T23:54:36+0200",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.42.0.z20250331-1358, environment: Java 21.0.6 (Eclipse Adoptium)"
 )
 @Component
@@ -64,6 +64,7 @@ public class BotigaMapperImpl implements BotigaMapper {
         CategoriaDTO categoriaDTO = new CategoriaDTO();
 
         categoriaDTO.setDescripcio( categoria.getDescripcio() );
+        categoriaDTO.setNombre( categoria.getNombre() );
         categoriaDTO.setStatus( categoria.getStatus() );
 
         return categoriaDTO;
@@ -78,6 +79,7 @@ public class BotigaMapperImpl implements BotigaMapper {
         Categoria categoria = new Categoria();
 
         categoria.setDescripcio( categoriaDto.getDescripcio() );
+        categoria.setNombre( categoriaDto.getNombre() );
         categoria.setStatus( categoriaDto.getStatus() );
 
         return categoria;
@@ -91,8 +93,9 @@ public class BotigaMapperImpl implements BotigaMapper {
 
         SubcategoriaDTO subcategoriaDTO = new SubcategoriaDTO();
 
-        subcategoriaDTO.setCategoriaId( subcategoria.getCategoriaId() );
+        subcategoriaDTO.setCategoria( toDTO( subcategoria.getCategoria() ) );
         subcategoriaDTO.setDescripcion( subcategoria.getDescripcion() );
+        subcategoriaDTO.setNombre( subcategoria.getNombre() );
 
         return subcategoriaDTO;
     }
@@ -105,7 +108,9 @@ public class BotigaMapperImpl implements BotigaMapper {
 
         Subcategoria subcategoria = new Subcategoria();
 
+        subcategoria.setCategoria( toEntity( subcategoriaDto.getCategoria() ) );
         subcategoria.setDescripcion( subcategoriaDto.getDescripcion() );
+        subcategoria.setNombre( subcategoriaDto.getNombre() );
 
         return subcategoria;
     }

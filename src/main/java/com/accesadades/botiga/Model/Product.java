@@ -46,6 +46,6 @@ public class Product implements Serializable {
     private LocalDateTime updateDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subcategory_id")
-    private Subcategoria subcategory;
+    @JoinColumn(name = "categoria_nombre", referencedColumnName = "nombre")
+    private Categoria categoria;
 }
