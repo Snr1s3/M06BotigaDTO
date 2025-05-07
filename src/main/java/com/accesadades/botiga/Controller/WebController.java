@@ -30,19 +30,6 @@ public class WebController {
 
     @GetMapping("/search")
     public String showSearchPage() {
-        return "search"; // carrega el formulari de cerca
-    }
-
-   /* @PostMapping("/prodname")
-    public String searchProductByName(@RequestParam(value = "name", required = false) String name, Model model) {
-        if (name != null && !name.trim().isEmpty()) {
-            ProductDTO product = productService.findProductsByName(name);
-            if (product != null) {
-                model.addAttribute("product", product);
-            } else {
-                model.addAttribute("notFound", true); // per mostrar un missatge d’error si no trobat
-            }
-        }
         return "search";
-    }*/
+    }
 }

@@ -3,8 +3,6 @@ package com.accesadades.botiga.Service;
 import com.accesadades.botiga.DTO.ProductDTO;
 import com.accesadades.botiga.Model.Product;
 import com.accesadades.botiga.Repository.ProductRepository;
-import com.accesadades.botiga.Repository.CategoriaRepository;
-import com.accesadades.botiga.Repository.SubcategoriaRepository;
 import com.accesadades.botiga.Mapper.BotigaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,23 +18,15 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Autowired
-    private CategoriaRepository categoriaRepository;
-
-    @Autowired
-    private SubcategoriaRepository subcategoriaRepository;
-
-    @Autowired
     private BotigaMapper mapper;
 
     @Override
     public ProductDTO save(ProductDTO productDTO) {
-        if (productDTO.getSubcategoriaId() == null || !subcategoriaRepository.existsById(productDTO.getSubcategoriaId())) {
-            throw new IllegalArgumentException("La subcategoría especificada no existe.");
-        }
         Product product = mapper.toEntity(productDTO);
         Product savedProduct = productRepository.save(product);
         return mapper.toDTO(savedProduct);
     }
+    
 
     @Override
     public Set<ProductDTO> findAll() {
