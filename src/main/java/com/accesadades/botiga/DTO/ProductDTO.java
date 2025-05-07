@@ -4,12 +4,9 @@ import lombok.Data;
 
 @Data
 public class ProductDTO {
-    private Long productId;
     private String name;
-    private SubcategoriaDTO subcategoria;
     private String description;
     private String company;
     private float price;
     private long units;
-    private CategoriaDTO categoria;
 }

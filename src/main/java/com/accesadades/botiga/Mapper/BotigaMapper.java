@@ -7,8 +7,9 @@ import com.accesadades.botiga.Model.Categoria;
 import com.accesadades.botiga.DTO.SubcategoriaDTO;
 import com.accesadades.botiga.Model.Subcategoria;
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BotigaMapper {
     ProductDTO toDTO(Product producte);
 
@@ -16,11 +17,11 @@ public interface BotigaMapper {
 
     CategoriaDTO toDTO(Categoria categoria);
 
-    Categoria toEntity(CategoriaDTO dto);
+    Categoria toEntity(CategoriaDTO categoriaDto);
 
     SubcategoriaDTO toDTO(Subcategoria subcategoria);
 
-    Subcategoria toEntity(SubcategoriaDTO dto);
+    Subcategoria toEntity(SubcategoriaDTO subcategoriaDto);
 }
 
 
