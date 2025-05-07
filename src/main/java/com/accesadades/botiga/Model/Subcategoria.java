@@ -20,9 +20,9 @@ public class Subcategoria implements Serializable {
 
     @Column(name = "nombre")
     private String nombre;
-
-    @Column(name = "descripcion")
-    private String description;
+    
+    @Column(name = "desc_subcategoria")
+    private String descripcio;    
 
     @ManyToOne
     @JoinColumn(name = "categoria_nombre")

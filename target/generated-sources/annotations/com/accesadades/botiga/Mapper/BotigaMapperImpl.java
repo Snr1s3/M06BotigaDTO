@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-07T23:56:03+0200",
+    date = "2025-05-08T00:31:27+0200",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.42.0.z20250331-1358, environment: Java 21.0.6 (Eclipse Adoptium)"
 )
 @Component
@@ -94,6 +94,7 @@ public class BotigaMapperImpl implements BotigaMapper {
         SubcategoriaDTO subcategoriaDTO = new SubcategoriaDTO();
 
         subcategoriaDTO.setCategoria( toDTO( subcategoria.getCategoria() ) );
+        subcategoriaDTO.setDescripcio( subcategoria.getDescripcio() );
         subcategoriaDTO.setNombre( subcategoria.getNombre() );
 
         return subcategoriaDTO;
@@ -108,6 +109,7 @@ public class BotigaMapperImpl implements BotigaMapper {
         Subcategoria subcategoria = new Subcategoria();
 
         subcategoria.setCategoria( toEntity( subcategoriaDto.getCategoria() ) );
+        subcategoria.setDescripcio( subcategoriaDto.getDescripcio() );
         subcategoria.setNombre( subcategoriaDto.getNombre() );
 
         return subcategoria;

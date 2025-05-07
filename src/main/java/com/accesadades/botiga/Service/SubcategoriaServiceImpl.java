@@ -52,8 +52,8 @@ public class SubcategoriaServiceImpl implements SubcategoriaService {
     }
 
     @Override
-    public Optional<SubcategoriaDTO> findByDescSubcategoria(String desc) {
-        return subcategoriaRepository.findByDescription(desc)
+    public Optional<SubcategoriaDTO> findByDescSubcategoria(String descripcio) {
+        return subcategoriaRepository.findByDescriptio(descripcio)
                 .map(mapper::toDTO);
     }
 

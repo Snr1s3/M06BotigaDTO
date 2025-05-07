@@ -8,7 +8,6 @@
 
     @Repository
     public interface ProductRepository extends JpaRepository<Product, Long> {
-
         Product findByName(String name);
         List<Product> findByCategoria_Nombre(String nombreCategoria);
         Set<Product> findByNameAndPrice(String name, float price);

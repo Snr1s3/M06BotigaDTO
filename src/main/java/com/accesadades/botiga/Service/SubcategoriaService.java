@@ -7,7 +7,7 @@ public interface SubcategoriaService {
     SubcategoriaDTO save(SubcategoriaDTO subcategoriaDTO);
     Set<SubcategoriaDTO> findAll();
     Optional<SubcategoriaDTO> findById(Long id);
-    Optional<SubcategoriaDTO> findByDescSubcategoria(String desc);
+    Optional<SubcategoriaDTO> findByDescSubcategoria(String descripcio);
     Set<SubcategoriaDTO> findAllByCategoriaId(Long idCategoria);
     boolean delete(Long id);
     boolean update(SubcategoriaDTO subcategoriaDTO);

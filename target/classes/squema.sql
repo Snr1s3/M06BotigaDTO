@@ -3,6 +3,7 @@ USE botiga;
 
 CREATE TABLE categoria (
   id_categoria BIGINT AUTO_INCREMENT PRIMARY KEY,
+  nombre_categoria VARCHAR(255),
   desc_categoria VARCHAR(255),
   status_categoria VARCHAR(50),
   creation_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -11,12 +12,13 @@ CREATE TABLE categoria (
 
 CREATE TABLE subcategoria (
   id_subcategoria BIGINT AUTO_INCREMENT PRIMARY KEY,
+  nombre_subcategoria VARCHAR(255),
   desc_subcategoria VARCHAR(255),
   status_subcategoria VARCHAR(50),
   id_categoria BIGINT,
   creation_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT fk_subcategoria_categoria FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria)
+  CONSTRAINT fk_subcategoria_categoria FOREIGN KEY (nombre_categoria) REFERENCES categoria(nombre_categoria)
 );
 
 CREATE TABLE products (
@@ -30,8 +32,8 @@ CREATE TABLE products (
   updated_at DATETIME(6) DEFAULT NULL,
   id_categoria BIGINT,
   id_subcategoria BIGINT,
-  CONSTRAINT fk_product_categoria FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria),
-  CONSTRAINT fk_product_subcategoria FOREIGN KEY (id_subcategoria) REFERENCES subcategoria(id_subcategoria)
+  CONSTRAINT fk_product_categoria FOREIGN KEY (product_categoria) REFERENCES categoria(product_categoria),
+  CONSTRAINT fk_product_subcategoria FOREIGN KEY (product_subcategoria) REFERENCES subcategoria(product_subcategoria)
 );
 
 -- Insertar categorías
