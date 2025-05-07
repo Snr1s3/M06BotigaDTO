@@ -11,15 +11,13 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BotigaMapper {
-    ProductDTO toDTO(Product producte);
 
+    ProductDTO toDTO(Product producte);
     Product toEntity(ProductDTO dto);
 
     CategoriaDTO toDTO(Categoria categoria);
-
     Categoria toEntity(CategoriaDTO categoriaDto);
 
     SubcategoriaDTO toDTO(Subcategoria subcategoria);
-
     Subcategoria toEntity(SubcategoriaDTO subcategoriaDto);
 }

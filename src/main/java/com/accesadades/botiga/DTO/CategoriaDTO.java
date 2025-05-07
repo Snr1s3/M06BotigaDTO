@@ -6,6 +6,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class CategoriaDTO {
+    private String nombre; 
     private String descripcio;
     private String status;
 }

@@ -9,8 +9,8 @@ public interface ProductService {
     Set<ProductDTO> findAll();
     Optional<ProductDTO> findById(Long id);
     Set<ProductDTO> findProductsByName(String name);
-    Set<ProductDTO> findAllBySubcategoryId(Long idSubcategoria);
-    Set<ProductDTO> findAllByCategoriaId(Long idCategoria);
+    // Set<ProductDTO> findAllBySubcategoryId(Long idSubcategoria);
+    Set<ProductDTO> findAllByCategoriaNom(String nombreCategoria);
     boolean updatePrice(Long id, Long nouPreu);
     boolean delete(Long id);
 }
