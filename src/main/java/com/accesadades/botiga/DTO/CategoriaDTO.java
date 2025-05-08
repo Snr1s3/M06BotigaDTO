@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 public class CategoriaDTO {
     private String nombre; 
-    private String descripcio;
+    private String description;
     private String status;
 }
 

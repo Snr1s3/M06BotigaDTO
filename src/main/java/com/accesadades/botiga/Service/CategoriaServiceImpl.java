@@ -22,7 +22,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public CategoriaDTO save(CategoriaDTO categoriaDTO) {
-        if (categoriaRepository.findByDescripcio(categoriaDTO.getDescripcio()).isPresent()) {
+        if (categoriaRepository.findByDescription(categoriaDTO.getDescription()).isPresent()) {
             throw new IllegalArgumentException("La categoría ya existe con esa descripción.");
         }
     
@@ -37,7 +37,7 @@ public class CategoriaServiceImpl implements CategoriaService {
         if (categoriaDTO == null) {
             return false;
         }
-        Optional<Categoria> existing = categoriaRepository.findByDescripcio(categoriaDTO.getDescripcio());
+        Optional<Categoria> existing = categoriaRepository.findByDescription(categoriaDTO.getDescription());
         if (existing.isPresent()) {
             Categoria toUpdate = existing.get();
             toUpdate.setStatus(categoriaDTO.getStatus());
@@ -65,7 +65,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public Optional<CategoriaDTO> findByDescCategoria(String desc) {
-        return categoriaRepository.findByDescripcio(desc)
+        return categoriaRepository.findByDescription(desc)
                 .map(mapper::toDTO);
     }
 

@@ -171,7 +171,7 @@ public class RESTBotigaController {
     @PostMapping("api/botiga/inserirSubcategoria")
     public ResponseEntity<String> inserirSubcategoria(@RequestBody SubcategoriaDTO subcategoriaDTO) {
         try {
-            if (subcategoriaDTO.getCategoria() == null || subcategoriaDTO.getCategoria().getNombre() == null) {
+            if (subcategoriaDTO.getCatName() == null || subcategoriaDTO.getCatName()== null) {
                 return ResponseEntity.badRequest().body("Error: Cal assignar la subcategoria a una categoria.");
             }
             SubcategoriaDTO saved = subcategoriaService.save(subcategoriaDTO);
@@ -243,15 +243,22 @@ public class RESTBotigaController {
 
     // api/botiga/LlistarSubcategoriesPerCategoria?idCategoria=...
     @GetMapping("/api/botiga/LlistarSubcategoriesPerCategoria")
-    public ResponseEntity<?> llistarSubcategoriesPerCategoria(@RequestParam(name = "idCategoria", required = true) Long idCategoria) {
+    public ResponseEntity<?> llistarSubcategoriesPerCategoria(@RequestParam(name = "nomCategoria", required = true) String nomCategoria) {
         try {
-            Set<SubcategoriaDTO> subcategories = subcategoriaService.findAllByCategoriaId(idCategoria);
+            // Buscar la categoría por nombre
+            Categoria categoria = categoriaRepository.findByNombre(nomCategoria)
+                    .orElseThrow(() -> new IllegalArgumentException("No s'ha trobat cap categoria amb el nom: " + nomCategoria));
+
+            // Obtener las subcategorías por el ID de la categoría
+            Set<SubcategoriaDTO> subcategories = subcategoriaService.findAllByCategoriaId(categoria.getId());
             if (subcategories != null && !subcategories.isEmpty()) {
                 return ResponseEntity.ok(subcategories);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("No hi ha subcategories disponibles per la categoria amb ID: " + idCategoria);
+                        .body("No hi ha subcategories disponibles per la categoria amb nom: " + nomCategoria);
             }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error en llistar les subcategories per categoria: " + e.getMessage());

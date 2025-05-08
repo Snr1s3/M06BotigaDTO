@@ -26,7 +26,7 @@ public class Categoria implements Serializable {
     private String nombre;
 
     @Column(name = "desc_categoria")
-    private String descripcio;
+    private String description;
 
     @Column(name = "status_categoria")
     private String status;

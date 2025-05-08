@@ -7,6 +7,6 @@ import lombok.ToString;
 @ToString
 public class SubcategoriaDTO {
     private String nombre;
-    private String descripcion;
-    private CategoriaDTO categoria;
+    private String description;
+    private String catName;
 }

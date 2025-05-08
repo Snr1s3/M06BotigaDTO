@@ -7,15 +7,21 @@ import com.accesadades.botiga.Model.Categoria;
 import com.accesadades.botiga.Model.Product;
 import com.accesadades.botiga.Model.Subcategoria;
 import javax.annotation.processing.Generated;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-05-07T23:56:03+0200",
+    date = "2025-05-08T15:41:10+0200",
     comments = "version: 1.6.3, compiler: Eclipse JDT (IDE) 3.42.0.z20250331-1358, environment: Java 21.0.6 (Eclipse Adoptium)"
 )
 @Component
 public class BotigaMapperImpl implements BotigaMapper {
+
+    @Autowired
+    private SubcategoriaMapperHelper subcategoriaMapperHelper;
+    @Autowired
+    private ProductMapperHelper productMapperHelper;
 
     @Override
     public ProductDTO toDTO(Product producte) {
@@ -25,6 +31,7 @@ public class BotigaMapperImpl implements BotigaMapper {
 
         ProductDTO productDTO = new ProductDTO();
 
+        productDTO.setCatName( productMapperHelper.getCategoryNameByName( producteCategoriaNombre( producte ) ) );
         productDTO.setCompany( producte.getCompany() );
         productDTO.setDescription( producte.getDescription() );
         productDTO.setName( producte.getName() );
@@ -46,6 +53,7 @@ public class BotigaMapperImpl implements BotigaMapper {
 
         Product product = new Product();
 
+        product.setCategoria( productMapperHelper.getCategoryByName( dto.getCatName() ) );
         product.setCompany( dto.getCompany() );
         product.setDescription( dto.getDescription() );
         product.setName( dto.getName() );
@@ -63,7 +71,7 @@ public class BotigaMapperImpl implements BotigaMapper {
 
         CategoriaDTO categoriaDTO = new CategoriaDTO();
 
-        categoriaDTO.setDescripcio( categoria.getDescripcio() );
+        categoriaDTO.setDescription( categoria.getDescription() );
         categoriaDTO.setNombre( categoria.getNombre() );
         categoriaDTO.setStatus( categoria.getStatus() );
 
@@ -78,7 +86,7 @@ public class BotigaMapperImpl implements BotigaMapper {
 
         Categoria categoria = new Categoria();
 
-        categoria.setDescripcio( categoriaDto.getDescripcio() );
+        categoria.setDescription( categoriaDto.getDescription() );
         categoria.setNombre( categoriaDto.getNombre() );
         categoria.setStatus( categoriaDto.getStatus() );
 
@@ -93,7 +101,8 @@ public class BotigaMapperImpl implements BotigaMapper {
 
         SubcategoriaDTO subcategoriaDTO = new SubcategoriaDTO();
 
-        subcategoriaDTO.setCategoria( toDTO( subcategoria.getCategoria() ) );
+        subcategoriaDTO.setCatName( subcategoriaMapperHelper.getCategoryNameByName( subcategoriaCategoriaNombre( subcategoria ) ) );
+        subcategoriaDTO.setDescription( subcategoria.getDescription() );
         subcategoriaDTO.setNombre( subcategoria.getNombre() );
 
         return subcategoriaDTO;
@@ -107,9 +116,26 @@ public class BotigaMapperImpl implements BotigaMapper {
 
         Subcategoria subcategoria = new Subcategoria();
 
-        subcategoria.setCategoria( toEntity( subcategoriaDto.getCategoria() ) );
+        subcategoria.setCategoria( subcategoriaMapperHelper.getCategoryByName( subcategoriaDto.getCatName() ) );
+        subcategoria.setDescription( subcategoriaDto.getDescription() );
         subcategoria.setNombre( subcategoriaDto.getNombre() );
 
         return subcategoria;
+    }
+
+    private String producteCategoriaNombre(Product product) {
+        Categoria categoria = product.getCategoria();
+        if ( categoria == null ) {
+            return null;
+        }
+        return categoria.getNombre();
+    }
+
+    private String subcategoriaCategoriaNombre(Subcategoria subcategoria) {
+        Categoria categoria = subcategoria.getCategoria();
+        if ( categoria == null ) {
+            return null;
+        }
+        return categoria.getNombre();
     }
 }

@@ -3,7 +3,7 @@ package com.accesadades.botiga;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.accesadades.botiga")
 public class BotigaApplication {
 
 	public static void main(String[] args) {
